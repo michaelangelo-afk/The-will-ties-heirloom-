@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Williams Family Inheritance - The Will Ties</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <style>
+        :root {
+            --primary: #2c5530;
+            --secondary: #739e82;
+            --accent: #d4af37;
+            --light: #f8f9fa;
+            --dark: #1a1a1a;
+            --gray: #6c757d;
+            --transition: all 0.4s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: var(--light);
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4, h5 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 20px 0;
+            transition: var(--transition);
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo-icon {
+            color: var(--accent);
+            font-size: 28px;
+        }
+        
+        .logo-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--accent);
+            transition: var(--transition);
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        .back-button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .back-button:hover {
+            background-color: var(--secondary);
+            transform: translateY(-3px);
+        }
+        
+        /* Family Header */
+        .family-header {
+            margin-top: 120px;
+            text-align: center;
+            padding: 40px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .family-name {
+            font-size: 3.5rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 2;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .total-inheritance {
+            font-size: 1.5rem;
+            color: var(--gray);
+            margin-bottom: 40px;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .heir-layer {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.2) 0%, rgba(212, 175, 55, 0) 70%);
+            border-radius: 50%;
+            z-index: 1;
+            opacity: 0;
+        }
+        
+        .heir-name {
+            font-size: 2.5rem;
+            color: var(--accent);
+            position: relative;
+            z-index: 3;
+            margin-top: 20px;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .heir-percentage {
+            font-size: 1.2rem;
+            color: var(--secondary);
+            margin-top: 10px;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        /* Inheritance Details */
+        .inheritance-details {
+            padding: 60px 0;
+            background-color: white;
+        }
+        
+        .details-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+        
+        .assets-section, .distribution-section {
+            background-color: var(--light);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--accent);
+        }
+        
+        .asset-list {
+            list-style: none;
+        }
+        
+        .asset-item {
+            padding: 15px 0;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .asset-item:last-child {
+            border-bottom: none;
+        }
+        
+        .asset-name {
+            font-weight: 500;
+        }
+        
+        .asset-value {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .heir-list {
+            list-style: none;
+        }
+        
+        .heir-item {
+            padding: 15px 0;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .heir-item:last-child {
+            border-bottom: none;
+        }
+        
+        .heir-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .heir-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+        
+        .heir-details h4 {
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .heir-details p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .heir-percentage-badge {
+            background-color: var(--accent);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        
+        /* Inheritance Timeline */
+        .inheritance-timeline {
+            padding: 60px 0;
+            background-color: #f8f9fa;
+        }
+        
+        .timeline-container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background-color: var(--secondary);
+        }
+        
+        .timeline-item {
+            margin-bottom: 40px;
+            position: relative;
+            width: 50%;
+            padding: 0 40px;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .timeline-item:nth-child(odd) {
+            left: 0;
+        }
+        
+        .timeline-item:nth-child(even) {
+            left: 50%;
+        }
+        
+        .timeline-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+        
+        .timeline-content::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            transform: rotate(45deg);
+        }
+        
+        .timeline-item:nth-child(odd) .timeline-content::after {
+            right: -10px;
+        }
+        
+        .timeline-item:nth-child(even) .timeline-content::after {
+            left: -10px;
+        }
+        
+        .timeline-date {
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+        
+        .timeline-marker {
+            position: absolute;
+            top: 20px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            z-index: 2;
+        }
+        
+        .timeline-item:nth-child(odd) .timeline-marker {
+            right: -10px;
+        }
+        
+        .timeline-item:nth-child(even) .timeline-marker {
+            left: -10px;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column h3 {
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #444;
+            color: #999;
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .family-name {
+                font-size: 2.8rem;
+            }
+            
+            .details-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .timeline-container::before {
+                left: 30px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 0;
+            }
+            
+            .timeline-item:nth-child(even) {
+                left: 0;
+            }
+            
+            .timeline-item:nth-child(odd) .timeline-content::after,
+            .timeline-item:nth-child(even) .timeline-content::after {
+                left: -10px;
+                right: auto;
+            }
+            
+            .timeline-item:nth-child(odd) .timeline-marker,
+            .timeline-item:nth-child(even) .timeline-marker {
+                left: 20px;
+                right: auto;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .family-name {
+                font-size: 2.2rem;
+            }
+            
+            .heir-name {
+                font-size: 2rem;
+            }
+            
+            .heir-layer {
+                width: 200px;
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <i class="fas fa-tree logo-icon"></i>
+                <span class="logo-text">The Will Ties</span>
+            </div>
+            <nav class="nav-links">
+                <a href="#">Home</a>
+                <a href="#">Families</a>
+                <a href="#">Features</a>
+                <a href="#">How It Works</a>
+                <a href="#">About</a>
+            </nav>
+            <button class="back-button" onclick="window.location.href='index.html'">
+                <i class="fas fa-arrow-left"></i>
+                Back to Home
+            </button>
+        </div>
+    </header>
+
+    <!-- Family Header -->
+    <section class="family-header">
+        <div class="container">
+            <h1 class="family-name">THE WILLIAMS</h1>
+            <p class="total-inheritance">Total Inheritance: $47,000</p>
+            <div class="heir-layer"></div>
+            <h2 class="heir-name">Clara Williams</h2>
+            <p class="heir-percentage">Primary Heir - 55% of Inheritance</p>
+        </div>
+    </section>
+
+    <!-- Inheritance Details -->
+    <section class="inheritance-details">
+        <div class="container">
+            <div class="details-container">
+                <div class="assets-section">
+                    <h3 class="section-title">Family Assets</h3>
+                    <ul class="asset-list">
+                        <li class="asset-item">
+                            <span class="asset-name">Family Home</span>
+                            <span class="asset-value">$250,000</span>
+                        </li>
+                        <li class="asset-item">
+                            <span class="asset-name">Investment Portfolio</span>
+                            <span class="asset-value">$120,000</span>
+                        </li>
+                        <li class="asset-item">
+                            <span class="asset-name">Savings Account</span>
+                            <span class="asset-value">$47,000</span>
+                        </li>
+                        <li class="asset-item">
+                            <span class="asset-name">Family Heirlooms</span>
+                            <span class="asset-value">$15,000</span>
+                        </li>
+                        <li class="asset-item">
+                            <span class="asset-name">Vehicle</span>
+                            <span class="asset-value">$18,000</span>
+                        </li>
+                        <li class="asset-item">
+                            <span class="asset-name">Life Insurance</span>
+                            <span class="asset-value">$20,000</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="distribution-section">
+                    <h3 class="section-title">Inheritance Distribution</h3>
+                    <ul class="heir-list">
+                        <li class="heir-item">
+                            <div class="heir-info">
+                                <div class="heir-avatar">
+                                    <i class="fas fa-female"></i>
+                                </div>
+                                <div class="heir-details">
+                                    <h4>Clara Williams</h4>
+                                    <p>Daughter & Primary Heir</p>
+                                </div>
+                            </div>
+                            <span class="heir-percentage-badge">55%</span>
+                        </li>
+                        <li class="heir-item">
+                            <div class="heir-info">
+                                <div class="heir-avatar">
+                                    <i class="fas fa-male"></i>
+                                </div>
+                                <div class="heir-details">
+                                    <h4>Robert Williams</h4>
+                                    <p>Son</p>
+                                </div>
+                            </div>
+                            <span class="heir-percentage-badge">25%</span>
+                        </li>
+                        <li class="heir-item">
+                            <div class="heir-info">
+                                <div class="heir-avatar">
+                                    <i class="fas fa-female"></i>
+                                </div>
+                                <div class="heir-details">
+                                    <h4>Eleanor Williams</h4>
+                                    <p>Granddaughter</p>
+                                </div>
+                            </div>
+                            <span class="heir-percentage-badge">15%</span>
+                        </li>
+                        <li class="heir-item">
+                            <div class="heir-info">
+                                <div class="heir-avatar">
+                                    <i class="fas fa-heart"></i>
+                                </div>
+                                <div class="heir-details">
+                                    <h4>Family Charity</h4>
+                                    <p>Designated Donation</p>
+                                </div>
+                            </div>
+                            <span class="heir-percentage-badge">5%</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Inheritance Timeline -->
+    <section class="inheritance-timeline">
+        <div class="container">
+            <h2 class="section-title" style="text-align: center; margin-bottom: 50px;">Inheritance Timeline</h2>
+            <div class="timeline-container">
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">January 15, 2023</div>
+                        <h4>Will Creation</h4>
+                        <p>The Williams family will was officially created and notarized with all assets documented.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">March 3, 2023</div>
+                        <h4>Asset Valuation</h4>
+                        <p>Professional valuation of all family assets completed and recorded in the will.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">June 20, 2023</div>
+                        <h4>Heir Designation</h4>
+                        <p>Clara Williams designated as primary heir with 55% inheritance share.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">September 12, 2023</div>
+                        <h4>Legal Review</h4>
+                        <p>Complete legal review of the will by estate planning attorneys.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">December 5, 2023</div>
+                        <h4>Will Activation</h4>
+                        <p>The will is officially activated and stored in secure digital vault.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>The Will Ties</h3>
+                    <p>Preserving family legacies through secure inheritance management and memory preservation.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Families</a></li>
+                        <li><a href="#">Pricing</a></li>
+                        <li><a href="#">About Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Legal Templates</a></li>
+                        <li><a href="#">Estate Planning Guide</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">support@thewillties.com</a></li>
+                        <li><a href="#">+1 (800) 123-4567</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 The Will Ties Heirloom. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize animations when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Family header animations
+            anime({
+                targets: '.family-name',
+                opacity: [0, 1],
+                translateY: [30, 0],
+                duration: 1000,
+                easing: 'easeOutCubic',
+                delay: 300
+            });
+            
+            anime({
+                targets: '.total-inheritance',
+                opacity: [0, 1],
+                translateY: [30, 0],
+                duration: 1000,
+                easing: 'easeOutCubic',
+                delay: 500
+            });
+            
+            anime({
+                targets: '.heir-layer',
+                opacity: [0, 1],
+                scale: [0.5, 1],
+                duration: 1200,
+                easing: 'easeOutCubic',
+                delay: 700
+            });
+            
+            anime({
+                targets: '.heir-name',
+                opacity: [0, 1],
+                translateY: [30, 0],
+                duration: 1000,
+                easing: 'easeOutCubic',
+                delay: 900
+            });
+            
+            anime({
+                targets: '.heir-percentage',
+                opacity: [0, 1],
+                translateY: [30, 0],
+                duration: 1000,
+                easing: 'easeOutCubic',
+                delay: 1100
+            });
+            
+            // Details sections animation
+            anime({
+                targets: '.assets-section, .distribution-section',
+                opacity: [0, 1],
+                translateY: [30, 0],
+                duration: 800,
+                easing: 'easeOutCubic',
+                delay: anime.stagger(200)
+            });
+            
+            // Timeline items animation
+            anime({
+                targets: '.timeline-item',
+                opacity: [0, 1],
+                translateY: [30, 0],
+                duration: 800,
+                easing: 'easeOutCubic',
+                delay: anime.stagger(200)
+            });
+            
+            // Pulsing animation for heir layer
+            anime({
+                targets: '.heir-layer',
+                scale: [1, 1.1, 1],
+                duration: 3000,
+                easing: 'easeInOutSine',
+                loop: true
+            });
+            
+            // Floating animation for heir name
+            anime({
+                targets: '.heir-name',
+                translateY: [0, -10, 0],
+                duration: 4000,
+                easing: 'easeInOutSine',
+                loop: true
+            });
+        });
+    </script>
+</body>
+</html>
